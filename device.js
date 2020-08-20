@@ -13,6 +13,19 @@ const status = {
 	'OL CAL': 'calibrating',
 };
 
+const parse = (data, parsers) => {
+	const result = { ...data };
+	parsers.forEach(({ parse, fields }) => {
+		fields.forEach((field) => {
+			if (undefined === result[field]) return;
+
+			result[field] = parse(result[field]);
+		});
+	});
+
+	return result;
+};
+
 module.exports.Device = class Device extends EventEmitter {
 
 	topics() {
@@ -41,14 +54,41 @@ module.exports.Device = class Device extends EventEmitter {
 		this.update(this.parse(data));
 	}
 
-	parse(data) {
+	parse(raw) {
+		const data = parse(raw, [
+			{
+				parse: (a) => parseInt(a, 10),
+				fields: [
+					'battery.charge',
+					'ups.temperature',
+					'ups.load',
+				],
+			},
+			{
+				parse: (a) => parseFloat(a),
+				fields: [
+					'battery.voltage',
+					'battery.voltage.high',
+					'battery.voltage.low',
+					'battery.voltage.nominal',
+					'input.current.nominal',
+					'input.frequency',
+					'input.frequency.nominal',
+					'input.voltage',
+					'input.voltage.fault',
+					'input.voltage.nominal',
+					'output.voltage',
+				],
+			},
+		]);
+
 		return {
 			...data,
 
 			'status.mode': status[data['ups.status']],
 			'status.beeper': data['ups.beeper.status'] === 'enabled',
 			'status.temperature': data['ups.temperature'],
-			'status.load': parseInt(data['ups.load'], 10),
+			'status.load': data['ups.load'],
 
 			'info.type': data['ups.type'] || undefined,
 			'info.manufacturer': data['ups.mfr'] || data['device.mfr'] || undefined,
