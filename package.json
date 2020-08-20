@@ -1,0 +1,43 @@
+{
+	"name": "mqtt-nut",
+	"version": "0.0.1",
+
+	"description": "MQTT integration for Network UPS Tools (NUT)",
+	"author": "zephyrus",
+
+	"license": "MIT",
+
+	"homepage": "https://github.com/zephyrus/mqtt-nut",
+
+	"bugs": {
+		"url": "https://github.com/zephyrus/mqtt-nut/issues"
+	},
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zephyrus/mqtt-nut.git"
+	},
+
+	"keywords": [
+		"mqtt",
+		"nut",
+		"ups"
+	],
+
+	"scripts": {
+		"lint": "eslint .",
+		"start": "node index.js"
+	},
+
+	"dependencies": {
+		"mqtt": "4.1.0",
+		"node-nut": "1.0.3",
+		"lodash": "4.17.19"
+	},
+
+	"devDependencies": {
+		"eslint": "6.8.0",
+		"eslint-plugin-import": "2.20.2",
+		"eslint-config-airbnb-base": "14.1.0"
+	}
+}
